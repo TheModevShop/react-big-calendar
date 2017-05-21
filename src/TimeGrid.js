@@ -141,6 +141,7 @@ export default class TimeGrid extends Component {
       , width
       , startAccessor
       , endAccessor
+      , secondaryTimeColumn
       , allDayAccessor } = this.props;
 
     width = width || this.state.gutterWidth;
@@ -176,19 +177,24 @@ export default class TimeGrid extends Component {
 
     return (
       <div className='rbc-time-view'>
-
         {this.renderHeader(range, allDayEvents, width)}
 
         <div ref='content' className='rbc-time-content'>
-          <div ref='timeIndicator' className='rbc-current-time-indicator' />
+          {
+            !secondaryTimeColumn ?
+            <div ref='timeIndicator' className='rbc-current-time-indicator' /> : <div ref='timeIndicator'/>
+          }
 
-          <TimeColumn
-            {...this.props}
-            showLabels
-            style={{ width }}
-            ref={gutterRef}
-            className='rbc-time-gutter'
-          />
+          {
+            !secondaryTimeColumn ?
+            <TimeColumn
+              {...this.props}
+              showLabels
+              style={{ width }}
+              ref={gutterRef}
+              className='rbc-time-gutter'
+            /> : null
+          }
 
           {this.renderEvents(range, rangeEvents, this.props.now)}
 
@@ -226,7 +232,7 @@ export default class TimeGrid extends Component {
   }
 
   renderHeader(range, events, width) {
-    let { messages, rtl, selectable, components, now } = this.props;
+    let { messages, rtl, selectable, components, now, secondaryTimeColumn } = this.props;
     let { isOverflowing } = this.state || {};
 
     let style = {};
@@ -240,23 +246,29 @@ export default class TimeGrid extends Component {
           'rbc-time-header',
           isOverflowing && 'rbc-overflowing'
         )}
-        style={style}
-      >
+        style={style}>
+
         <div className='rbc-row'>
-          <div
-            className='rbc-label rbc-header-gutter'
-            style={{ width }}
-          />
+          {
+            !secondaryTimeColumn ?
+            <div
+              className='rbc-label rbc-header-gutter'
+              style={{ width }} /> : null
+          }
           { this.renderHeaderCells(range) }
-        </div>
+        </div> 
+
         <div className='rbc-row'>
-          <div
-            ref={ref => this._gutters[0] = ref}
-            className='rbc-label rbc-header-gutter'
-            style={{ width }}
-          >
-            { message(messages).allDay }
-          </div>
+          {
+          !secondaryTimeColumn ?
+            <div
+              ref={ref => this._gutters[0] = ref}
+              className='rbc-label rbc-header-gutter'
+              style={{ width }}>
+                { message(messages).allDay }
+            </div> : null
+          }
+
           <DateContentRow
             now={now}
             minRows={2}
@@ -283,7 +295,7 @@ export default class TimeGrid extends Component {
   }
 
   renderHeaderCells(range){
-    let { dayFormat, culture, components, getDrilldownView } = this.props;
+    let { dayFormat, culture, components, getDrilldownView, headerLabel } = this.props;
     let HeaderComponent = components.header || Header
 
     return range.map((date, i) => {
@@ -293,7 +305,7 @@ export default class TimeGrid extends Component {
       let header = (
         <HeaderComponent
           date={date}
-          label={label}
+          label={headerLabel || label}
           localizer={localizer}
           format={dayFormat}
           culture={culture}
@@ -408,7 +420,7 @@ export default class TimeGrid extends Component {
       timeIndicator.style.display = 'block';
       timeIndicator.style[rtl ? 'left' : 'right'] = 0;
       timeIndicator.style[rtl ? 'right' : 'left'] = timeGutter.offsetWidth + 'px';
-      timeIndicator.style.top = offset + 'px';
+      timeIndicator.style.top = (40+offset) + 'px';
     } else {
       timeIndicator.style.display = 'none';
     }

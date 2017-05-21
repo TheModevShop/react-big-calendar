@@ -26,11 +26,11 @@ module.exports = {
   },
   module: {
     rules: [
-      rules.js({}),
+      rules.js(),
       rules.images(),
       rules.woff(),
       rules.css(),
-      rules.less({ browsers }),
+      rules.less(),
       {
         test: /\.md/,
         use: [...loaders.js({}), 'markdown-jsx-loader'],
