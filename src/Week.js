@@ -18,7 +18,9 @@ class Week extends React.Component {
     let range = Week.range(date, this.props)
 
     return (
-      <TimeGrid {...props} range={range} eventOffset={15} />
+      <div className="week-column-wrappers">
+        <TimeGrid {...props} timeGutterFormat={this.props.timeGutterFormatOverride || this.props.timeGutterFormat} range={range} eventOffset={15} />
+      </div>
     );
   }
 }

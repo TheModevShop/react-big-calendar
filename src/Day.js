@@ -5,15 +5,63 @@ import TimeGrid from './TimeGrid';
 import { navigate } from './utils/constants';
 
 class Day extends React.Component {
+  static defaultProps = {
+    min: dates.startOf(new Date(), 'day'),
+    max: dates.endOf(new Date(), 'day'),
+    scrollToTime: dates.startOf(new Date(), 'day')
+  }
+
+  componentWillMount() {
+    this.calculateScroll();
+  }
+
+  componentDidMount() {
+    this.applyScroll();
+  }
+
+  applyScroll() {
+    if (this._scrollRatio) {
+      const { content } = this.refs;
+      content.scrollTop = (content.scrollHeight * this._scrollRatio);
+      // Only do this once
+      this._scrollRatio = null;
+    }
+  }
+
+  calculateScroll() {
+    const { min, max, scrollToTime } = this.props;
+
+    const diffMillis = scrollToTime - dates.startOf(scrollToTime, 'day');
+    const totalMillis = dates.diff(max, min);
+
+    this._scrollRatio = diffMillis / totalMillis;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { date, scrollToTime } = this.props;
+    // When paginating, reset scroll
+    if (
+      !dates.eq(nextProps.date, date, 'minute') ||
+      !dates.eq(nextProps.scrollToTime, scrollToTime, 'minute')
+    ) {
+      this.calculateScroll();
+    }
+  }
+
   render() {
     let { date, calendars = [], ...props } = this.props;
     let range = Day.range(date);
     let calendarComponents;
     if (calendars && calendars.length) {
       calendarComponents = calendars.map((comp, i) => {
-        const compProps = comp.props || props;
         return (
-          <TimeGrid headerLabel={compProps.label} secondaryTimeColumn={i>0} key={'time-grid-calendar-'+i} {...props} range={range} eventOffset={10} />
+          <TimeGrid
+            headerLabel={comp.label}
+            secondaryTimeColumn={i>0} key={'time-grid-calendar-'+i}
+            {...props}
+            timeGutterFormat={this.props.timeGutterFormatOverride || this.props.timeGutterFormat}
+            range={range}
+            eventOffset={10} />
         )
       })
     } else {
@@ -21,7 +69,7 @@ class Day extends React.Component {
     }
 
     return (
-      <div className="day-column-wrappers" style={calendars.length ? {display: 'flex'} : {}}>
+      <div ref='content' className="day-column-wrappers" style={calendars.length ? {display: 'flex'} : {}}>
         {calendarComponents}
       </div>
     );
