@@ -420,7 +420,7 @@ export default class TimeGrid extends Component {
       timeIndicator.style.display = 'block';
       timeIndicator.style[rtl ? 'left' : 'right'] = 0;
       timeIndicator.style[rtl ? 'right' : 'left'] = timeGutter.offsetWidth + 'px';
-      timeIndicator.style.top = (65+offset) + 'px';
+      timeIndicator.style.top = (offset) + 'px';
     } else {
       timeIndicator.style.display = 'none';
     }

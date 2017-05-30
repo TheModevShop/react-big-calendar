@@ -69,8 +69,26 @@ class Day extends React.Component {
     }
 
     return (
-      <div ref='content' className="day-column-wrappers" style={calendars.length ? {display: 'flex'} : {}}>
-        {calendarComponents}
+      <div className="day-wrapper">
+        <div className="header">
+          {
+            calendars.map((comp, i) => {
+              return <div className={`label-wrapper-${i}`} key={i}>
+                {
+                  i === 0 ?
+                  <span className="flex">
+                    <span className="ghost"></span>
+                    <span className="label">{comp.label}</span>
+                  </span> :
+                  <span className="label">{comp.label}</span>
+                }
+              </div>
+            })
+          }
+        </div>
+        <div ref='content' className="day-column-wrappers" style={calendars.length ? {display: 'flex'} : {}}>
+          {calendarComponents}
+        </div>
       </div>
     );
   }
