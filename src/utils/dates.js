@@ -52,16 +52,28 @@ let dates = {
     return dates.eq(floor, date) ? floor : dates.add(floor, 1, unit)
   },
 
-  range(start, end, unit = 'day'){
+  range(start, end, unit = 'day', inc = 1){
     let current = start
       , days = [];
 
     while (dates.lte(current, end, unit)) {
       days.push(current)
-      current = dates.add(current, 1, unit)
+      current = dates.add(current, inc, unit)
     }
 
     return days
+  },
+
+  between(start, end, date, unit = null) {
+    const startDate = new Date(date);
+    startDate.setHours(start.split(':')[0])
+    startDate.setMinutes(start.split(':')[1])
+
+    const endDate = new Date(date);
+    endDate.setHours(end.split(':')[0])
+    endDate.setMinutes(end.split(':')[1])
+
+    return dates.gte(date, startDate, unit) && dates.lte(date, endDate, unit)
   },
 
   merge(date, time){
@@ -77,7 +89,15 @@ let dates = {
     date = dates.seconds(date,      dates.seconds(time))
     return dates.milliseconds(date, dates.milliseconds(time))
   },
-
+  
+  sameWeekDay(dateA, dateB, dow){
+    if (dateA && dateB) {
+      return dates.weekday(dateA) === dates.weekday(dateB);
+    } else {
+      return dates.weekday(dateA) === dow;
+    }
+  },
+  
   sameMonth(dateA, dateB){
     return dates.eq(dateA, dateB, 'month')
   },

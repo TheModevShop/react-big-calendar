@@ -79,6 +79,7 @@
     "invariant": "^2.1.0",
     "less-plugin-autoprefix": "^1.5.1",
     "lodash": "^4.17.4",
+    "moment": "^2.18.1",
     "prop-types": "^15.5.8",
     "react-overlays": "^0.7.0",
     "react-prop-types": "^0.4.0",

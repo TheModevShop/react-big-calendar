@@ -49,23 +49,25 @@ class Day extends React.Component {
   }
 
   render() {
-    let { date, calendars = [], ...props } = this.props;
+    let { date, calendars = [], businessHours, ...props } = this.props;
     let range = Day.range(date);
     let calendarComponents;
     if (calendars && calendars.length) {
       calendarComponents = calendars.map((comp, i) => {
         return (
           <TimeGrid
+            businessHours={businessHours}
             headerLabel={comp.label}
             secondaryTimeColumn={i>0} key={'time-grid-calendar-'+i}
             {...props}
+            events={comp.events || props.events}
             timeGutterFormat={this.props.timeGutterFormatOverride || this.props.timeGutterFormat}
             range={range}
             eventOffset={10} />
         )
       })
     } else {
-      calendarComponents = <TimeGrid key={'time-grid-calendar'} {...props} range={range} eventOffset={10} />
+      calendarComponents = <TimeGrid key={'time-grid-calendar'} {...props} businessHours={businessHours} range={range} eventOffset={10} />
     }
 
     return (
