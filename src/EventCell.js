@@ -24,7 +24,6 @@ let propTypes = {
 
 class EventCell extends React.Component {
   render() {
-    console.log(event.style)
     let {
         className
       , event
@@ -47,11 +46,11 @@ class EventCell extends React.Component {
 
     if (eventPropGetter)
       var { style, className: xClassName } = eventPropGetter(event, start, end, selected);
-
+       
     return (
       <EventWrapper event={event}>
         <div
-          style={{...event.style, ...props.style, ...style}}
+          style={{...props.style, ...style}}
           className={cn('rbc-event', className, xClassName, {
             'rbc-selected': selected,
             'rbc-event-allday': isAllDay || dates.diff(start, dates.ceil(end, 'day'), 'day') > 1,

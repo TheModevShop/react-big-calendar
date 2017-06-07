@@ -125,12 +125,13 @@ export default class TimeGrid extends Component {
   }
 
   handleSelectAllDaySlot = (slots, slotInfo) => {
-    const { onSelectSlot } = this.props;
+    const { onSelectSlot, staffId } = this.props;
     notify(onSelectSlot, {
       slots,
       start: slots[0],
       end: slots[slots.length - 1],
-      action: slotInfo.action
+      action: slotInfo.action,
+      staffId
     })
   }
 

@@ -163,7 +163,6 @@ class DaySlot extends React.Component {
         <EventWrapper event={event} key={'evt_' + idx}>
           <div
             style={{
-              ...event.style,
               ...xStyle,
               top: `${top}%`,
               height: `${height}%`,
@@ -300,7 +299,8 @@ class DaySlot extends React.Component {
       slots,
       start: startDate,
       end: endDate,
-      action
+      action,
+      staffId: this.props.staffId
     })
   };
 

@@ -61,6 +61,7 @@ class Day extends React.Component {
             secondaryTimeColumn={i>0} key={'time-grid-calendar-'+i}
             {...props}
             events={comp.events || props.events}
+            staffId={comp.staffId}
             timeGutterFormat={this.props.timeGutterFormatOverride || this.props.timeGutterFormat}
             range={range}
             eventOffset={10} />
