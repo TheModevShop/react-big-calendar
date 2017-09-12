@@ -5,7 +5,8 @@ import cn from 'classnames';
 import dates from './utils/dates';
 import { elementType } from './utils/propTypes';
 import BackgroundWrapper from './BackgroundWrapper';
-import TimeSlotGroup from './TimeSlotGroup'
+import TimeSlotGroup from './TimeSlotGroup';
+import moment from 'moment-timezone';
 
 export default class TimeColumn extends Component {
   static propTypes = {
@@ -33,11 +34,19 @@ export default class TimeColumn extends Component {
 
   renderTimeSliceGroup(key, isNow, date) {
     const { dayWrapperComponent, timeslots, showLabels, step, timeGutterFormat, culture, businessHours } = this.props;
-
+    let hoursForDay = this.props.businessHours[moment(date).format('YYYY-MM-DD')];
+    let hoursForDayArray = []
+    if (hoursForDay) {
+      let i = 0;
+      while (i <= (timeslots-1)) {
+        hoursForDayArray.push(hoursForDay.hours[timeslots*key+i])
+        i++
+      }
+    }
     return (
       <TimeSlotGroup
         key={key}
-        businessHours={businessHours}
+        businessHours={hoursForDayArray}
         isNow={isNow}
         value={date}
         step={step}

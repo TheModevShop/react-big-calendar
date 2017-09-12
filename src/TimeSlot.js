@@ -3,12 +3,15 @@ import React, { Component } from 'react';
 import cn from 'classnames';
 import { elementType } from './utils/propTypes';
 import date from './utils/dates.js';
+import moment from 'moment-timezone';
 import _ from 'lodash';
+
+window.moment = moment;
 
 
 export default class TimeSlot extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {}
   }
 
@@ -27,38 +30,10 @@ export default class TimeSlot extends Component {
     content: ''
   }
 
-  componentWillMount() {
-    this.calculateDateOfWeek();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.value !== nextProps.value) {
-      this.calculateDateOfWeek()
-    }
-  }
-
-  calculateDateOfWeek() {
-    const hoursForDay = _.filter(this.props.businessHours, ({dow}) => {
-      return date.sameWeekDay(this.props.value, null, dow);
-    })
-    this.setState({hours: hoursForDay, available: this.timeAvailable(this.props.value, hoursForDay)})
-  }
-
-  timeAvailable(value, hours) {
-    hours = hours || this.state.hours
-    let available;
-    _.forEach(hours, (h) => {
-      if (!available) {
-        available = date.between(h.start, h.end, this.props.value)
-      }
-    })
-    return available;
-  }
-
   render() {
     const { value } = this.props;
     const Wrapper = this.props.dayWrapperComponent;
-    const available = this.state.available
+    const available = this.props.businessHours && this.props.businessHours.open;
     return (
       <Wrapper value={value}>
         <div

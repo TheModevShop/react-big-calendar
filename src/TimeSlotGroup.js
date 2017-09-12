@@ -27,7 +27,7 @@ export default class TimeSlotGroup extends Component {
     const { dayWrapperComponent, showLabels, isNow, culture, businessHours } = this.props;
     return (
       <TimeSlot
-        businessHours={businessHours}
+        businessHours={businessHours[slotNumber]}
         key={slotNumber}
         dayWrapperComponent={dayWrapperComponent}
         showLabel={showLabels && !slotNumber}
