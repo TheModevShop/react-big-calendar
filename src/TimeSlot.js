@@ -31,9 +31,26 @@ export default class TimeSlot extends Component {
   }
 
   render() {
+    const businessHours = this.props.businessHours;
+    const selectedServices = this.props.selectedServices || [];
+
     const { value } = this.props;
     const Wrapper = this.props.dayWrapperComponent;
-    const available = this.props.businessHours && this.props.businessHours.open;
+
+    let available = businessHours && businessHours.open;
+
+    let selectedIsAvailable = true;
+    if (selectedServices.length) {
+      selectedIsAvailable = false;
+      _.forEach(selectedServices, (s) => {
+        const a = _.get(businessHours, 'available', []).indexOf(s)
+        if (a && !selectedIsAvailable) {
+          selectedIsAvailable = true;
+        }
+      })
+    }
+    available = available && selectedIsAvailable;
+
     return (
       <Wrapper value={value}>
         <div

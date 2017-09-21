@@ -33,7 +33,7 @@ export default class TimeColumn extends Component {
   }
 
   renderTimeSliceGroup(key, isNow, date) {
-    const { dayWrapperComponent, timeslots, showLabels, step, timeGutterFormat, culture, businessHours } = this.props;
+    const { dayWrapperComponent, timeslots, showLabels, step, timeGutterFormat, culture, businessHours, selectedServices } = this.props;
     let hoursForDay = this.props.businessHours[moment(date).format('YYYY-MM-DD')];
     let hoursForDayArray = []
     if (hoursForDay) {
@@ -46,6 +46,7 @@ export default class TimeColumn extends Component {
     return (
       <TimeSlotGroup
         key={key}
+        selectedServices={selectedServices}
         businessHours={hoursForDayArray}
         isNow={isNow}
         value={date}

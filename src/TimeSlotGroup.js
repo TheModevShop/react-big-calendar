@@ -24,9 +24,10 @@ export default class TimeSlotGroup extends Component {
   }
 
   renderSlice(slotNumber, content, value) {
-    const { dayWrapperComponent, showLabels, isNow, culture, businessHours } = this.props;
+    const { dayWrapperComponent, showLabels, isNow, culture, businessHours, selectedServices } = this.props;
     return (
       <TimeSlot
+        selectedServices={selectedServices}
         businessHours={businessHours[slotNumber]}
         key={slotNumber}
         dayWrapperComponent={dayWrapperComponent}
